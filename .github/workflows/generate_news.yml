@@ -26,11 +26,13 @@ jobs:
           PR_OWNER_USERNAME=${{ github.actor }}
           PR_OWNER_EMAIL=$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" "https://api.github.com/users/$PR_OWNER_USERNAME" | jq -r '.email')
           echo "PR Owner Email: $PR_OWNER_EMAIL"   
+          echo $PR_OWNER_EMAIL
+          echo $PR_OWNER_USERNAME
 
-      - name: Print Stuff
-        run: |
-          echo ${{ github.actor }}
-          echo This works
+#       - name: Print Stuff
+#         run: |
+#           echo ${{ github.actor }}
+#           echo This works
 
       - name: Populate File
         uses: 1arp/create-a-file-action@0.2
@@ -58,8 +60,11 @@ jobs:
       - name: Commit File
         if: steps.create_file.outputs
         run: |
-          git config --global user.email "${{ github.event.pull_request.user.email }}"
-          git config --local user.name "${{ github.event.pull_request.user.login }}"
+          PR_OWNER_USERNAME=${{ github.actor }}
+          PR_OWNER_EMAIL=$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" "https://api.github.com/users/$PR_OWNER_USERNAME" | jq -r '.email')
+          echo "PR Owner Email: $PR_OWNER_EMAIL"   
+          git config --global user.email $PR_OWNER_EMAIL
+          git config --local user.name $PR_OWNER_USERNAME
           git add .
           git commit -m "Add news snippet"
           git push origin ${{ github.head_ref }}
