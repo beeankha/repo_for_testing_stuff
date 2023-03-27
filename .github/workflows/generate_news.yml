@@ -20,6 +20,9 @@ jobs:
         if: contains(steps.check_comment.outputs.comment, 'please add news')
         id: create_file
         uses: actions/checkout@v2
+    
+      - name: Print Stuff
+        run: echo "$github.event.pull_request.user.email"
 
       - name: Populate File
         uses: 1arp/create-a-file-action@0.2
