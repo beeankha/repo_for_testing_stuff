@@ -1,8 +1,10 @@
 name: Add News
+
 on:
   issue_comment:
     types:
       - created
+
 jobs:
   check:
     if: >-
@@ -10,6 +12,7 @@ jobs:
         github.event.comment.body == 'please add news'
         || github.event_name == 'pull_request_target'
       )
+
     runs-on: ubuntu-latest
     steps:
       - name: Create File
