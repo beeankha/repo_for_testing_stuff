@@ -1,43 +1,42 @@
-name: Create News Snippet
+name: Add News
 
 on:
   issue_comment:
     types: [created]
 
 jobs:
-  create_news_snippet:
-    if: >-
-      !github.event.repository.fork
-      && (
-        github.event.comment.body == '@conda-bot please add news'
-        || github.event_name == 'pull_request_target'
-      )
+  add_news:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout code
+      - name: Check Comment
+        id: check_comment
+        uses: actions/github-script@v5
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const comment = context.payload.comment.body.toLowerCase();
+            return {
+              comment: comment,
+              prNumber: context.payload.issue.number,
+              prSha: context.payload.issue.pull_request.head.sha
+            }
+
+      - name: Create File
+        if: contains(steps.check_comment.outputs.comment, 'please add news')
+        id: create_file
         uses: actions/checkout@v2
-
-#       - name: Check for "add news snippet" comment
-#         id: check_comment
-#         uses: actions/github-script@v4
-#         with:
-#           script: |
-#             const { owner, repo } = context.repo;
-#             const issue_number = context.payload.issue.number;
-#             const { data: comments } = await github.issues.listComments({ owner, repo, issue_number });
-#             const comment = comments.find(c => c.body.toLowerCase().includes('@conda-bot please add news'));
-#             if (comment) {
-#               return { found: true, comment_id: comment.id };
-#             } else {
-#               return { found: false };
-#             }
-#           token: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Generate News Snippet File
-        if: steps.check_comment.outputs.found
+        with:
+          ref: ${{ github.head_ref }}
         run: |
-          # Get PR number
-          PR_NUMBER=$(jq --raw-output .pull_request.number "$GITHUB_EVENT_PATH")
+          cp path/to/template/file ./"${{ steps.check_comment.outputs.prNumber }}_news"
 
-          # Copy template file to new file
-          cp news/TEMPLATE "${PR_NUMBER}_news"
+      - name: Commit File
+        if: steps.create_file.outputs
+        uses: EndBug/add-and-commit@v7
+        with:
+          author_name: GitHub Actions
+          author_email: actions@github.com
+          message: Add news snippet
+          add: ./${{ steps.check_comment.outputs.prNumber }}_news
+          branch: ${{ github.head_ref }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}
