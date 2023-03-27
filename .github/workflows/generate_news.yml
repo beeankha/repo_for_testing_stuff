@@ -8,7 +8,7 @@ jobs:
   check:
     if: >-
       !github.event.repository.fork && (
-        github.event.comment.body == '@conda-bot please add news'
+        github.event.comment.body == 'please add news'
         || github.event_name == 'pull_request_target'
       )
 
