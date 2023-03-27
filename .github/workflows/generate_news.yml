@@ -20,12 +20,17 @@ jobs:
         if: contains(steps.check_comment.outputs.comment, 'please add news')
         id: create_file
         uses: actions/checkout@v2
-    
+
+      - name: Get PR Owner Email
+        run: |
+          PR_OWNER_USERNAME=${{ github.actor }}
+          PR_OWNER_EMAIL=$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" "https://api.github.com/users/$PR_OWNER_USERNAME" | jq -r '.email')
+          echo "PR Owner Email: $PR_OWNER_EMAIL"   
+
       - name: Print Stuff
         run: |
           echo ${{ github.actor }}
           echo This works
-          echo ${{ github.event.pusher.email }}
 
       - name: Populate File
         uses: 1arp/create-a-file-action@0.2
