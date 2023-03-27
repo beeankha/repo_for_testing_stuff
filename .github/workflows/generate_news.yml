@@ -51,4 +51,4 @@ jobs:
           git commit -m "Add news snippet"
           git push origin ${{ github.head_ref }}
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}
