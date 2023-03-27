@@ -24,7 +24,7 @@ jobs:
         with:
           branch: ${{ github.head_ref }}
           path: "news"
-          file: "${{ steps.pr_number }}_news"
+          file: news.txt
           content: |
             ### Enhancements
             * <news item>
@@ -48,7 +48,7 @@ jobs:
           author_name: GitHub Actions
           author_email: actions@github.com
           message: Add news snippet
-          add: "${{ steps.pr_number }}_news"
+          add: news.txt
           branch: ${{ github.head_ref }}
           github_token: ${{ secrets.GITHUB_TOKEN }}
           run: checkout-repo
