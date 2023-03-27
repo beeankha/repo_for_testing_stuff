@@ -47,8 +47,8 @@ jobs:
       - name: Commit File
         if: steps.create_file.outputs
         run: |
-          git config --global user.email "${GH_USERNAME}@users.noreply.github.com"
-          git config --local user.name "${GH_USERNAME}"
+          git config --global user.email ${{ github.event.pull_request.user.email }}
+          git config --local user.name ${{ github.event.pull_request.user.login }}
           git add .
           git commit -m "Add news snippet"
           git push origin ${{ github.head_ref }}
