@@ -22,7 +22,7 @@ jobs:
       - name: Populate File
         uses: 1arp/create-a-file-action@0.2
         with:
-          ref: ${{ github.head_ref }}
+          branch: ${{ github.head_ref }}
           path: "news"
           file: "${{ steps.pr_number }}_news"
           content: |
@@ -48,7 +48,7 @@ jobs:
           author_name: GitHub Actions
           author_email: actions@github.com
           message: Add news snippet
-          add: ${{ steps.check_comment.outputs.prNumber }}_news
+          add: "${{ steps.pr_number }}_news"
           branch: ${{ github.head_ref }}
           github_token: ${{ secrets.GITHUB_TOKEN }}
           run: checkout-repo
