@@ -32,4 +32,4 @@ jobs:
           message: Add news snippet
           add: ./${{ steps.check_comment.outputs.prNumber }}_news
           branch: ${{ github.head_ref }}
-          github_token: ${{ secrets.GITHUB_TOKEN }}
+#           github_token: ${{ secrets.GITHUB_TOKEN }}
