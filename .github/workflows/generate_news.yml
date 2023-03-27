@@ -1,42 +1,28 @@
+---
 name: Add News
-
 on:
   issue_comment:
-    types: [created]
-
+    types:
+      - created
 jobs:
   add_news:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Check Comment
-        id: check_comment
-        uses: actions/github-script@v5
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          script: |
-            const comment = context.payload.comment.body.toLowerCase();
-            return {
-              comment: comment,
-              prNumber: context.payload.issue.number,
-              prSha: context.payload.issue.pull_request.head.sha
-            }
+    if: >-
+      !github.event.repository.fork && (
+        github.event.comment.body == '@conda-bot please add news'
+        || github.event_name == 'pull_request_target'
+      )
 
-      - name: Create File
-        if: contains(steps.check_comment.outputs.comment, 'please add news')
-        id: create_file
-        uses: actions/checkout@v2
-        with:
-          ref: ${{ github.head_ref }}
-        run: |
-          cp path/to/template/file ./"${{ steps.check_comment.outputs.prNumber }}_news"
+  runs-on: ubuntu-latest
+  steps:
+    - name: Create File if: contains(steps.check_comment.outputs.comment, 'please add news') id: create_file uses: actions/checkout@v2 with:
+      ref: ${{ github.head_ref }}
+    run: |
+      cp path/to/template/file ./"${{ steps.check_comment.outputs.prNumber }}_news"
 
-      - name: Commit File
-        if: steps.create_file.outputs
-        uses: EndBug/add-and-commit@v7
-        with:
-          author_name: GitHub Actions
-          author_email: actions@github.com
-          message: Add news snippet
-          add: ./${{ steps.check_comment.outputs.prNumber }}_news
-          branch: ${{ github.head_ref }}
-          github_token: ${{ secrets.GITHUB_TOKEN }}
+    - name: Commit File if: steps.create_file.outputs uses: EndBug/add-and-commit@v7 with:
+      author_name: GitHub Actions
+      author_email: actions@github.com
+      message: Add news snippet
+      add: ./${{ steps.check_comment.outputs.prNumber }}_news
+      branch: ${{ github.head_ref }}
+      github_token: ${{ secrets.GITHUB_TOKEN }}
