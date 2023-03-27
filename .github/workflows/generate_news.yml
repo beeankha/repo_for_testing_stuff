@@ -47,10 +47,11 @@ jobs:
       - name: Commit File
         if: steps.create_file.outputs
         run: |
-          git config --local user.email "actions@github.com"
-          git config --local user.name "GitHub Actions"
           git add .
           git commit -m "Add news snippet"
           git push origin ${{ github.head_ref }}
         env:
           github_token: ${{ secrets.GITHUB_TOKEN }}
+
+# git config --local user.email "actions@github.com"
+# git config --local user.name "GitHub Actions"
