@@ -23,7 +23,7 @@ jobs:
         uses: 1arp/create-a-file-action@0.2
         with:
           branch: ${{ github.head_ref }}
-          path: "news"
+#           path: "news"
           file: news.txt
           content: |
             ### Enhancements
