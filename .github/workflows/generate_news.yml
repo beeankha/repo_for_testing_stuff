@@ -18,11 +18,11 @@ jobs:
         if: contains(steps.check_comment.outputs.comment, 'please add news')
         id: create_file
         uses: actions/checkout@v2
-        with:
-          ref: ${{ github.head_ref }}
  
       - name: Populate File
-        uses: 1arp/create-a-file-action@0.2
+        uses: |
+          - actions/checkout@v2
+          - 1arp/create-a-file-action@0.2
         with:
           ref: ${{ github.head_ref }}
           path: "news"
