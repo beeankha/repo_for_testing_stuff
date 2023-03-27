@@ -15,7 +15,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Create File
-        if: contains(steps.check_comment.outputs.comment, 'please add news')
+#         if: contains(steps.check_comment.outputs.comment, 'please add news')
         id: create_file
 #         uses: actions/checkout@v2
 #         with:
@@ -30,6 +30,6 @@ jobs:
           author_name: GitHub Actions
           author_email: actions@github.com
           message: Add news snippet
-          add: ./${{ steps.check_comment.outputs.prNumber }}_news
+          add: ${{ steps.check_comment.outputs.prNumber }}_news
           branch: ${{ github.head_ref }}
 #           github_token: ${{ secrets.GITHUB_TOKEN }}
