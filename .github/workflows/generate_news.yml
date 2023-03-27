@@ -51,9 +51,10 @@ jobs:
           git config --local user.name ${{ github.actor }}
           git add .
           git commit -m "Add news snippet"
-          git push origin ${{ github.head_ref }}
+          git push
         env:
           github_token: ${{ secrets.GITHUB_TOKEN }}
 
 #             PR_OWNER_USERNAME=${{ github.actor }}
 #           PR_OWNER_EMAIL=$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" "https://api.github.com/users/$PR_OWNER_USERNAME" | jq -r '.email')
+#           git push origin ${{ github.head_ref }}
