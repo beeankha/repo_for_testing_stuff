@@ -17,21 +17,21 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Check for "add news snippet" comment
-        id: check_comment
-        uses: actions/github-script@v4
-        with:
-          script: |
-            const { owner, repo } = context.repo;
-            const issue_number = context.payload.issue.number;
-            const { data: comments } = await github.issues.listComments({ owner, repo, issue_number });
-            const comment = comments.find(c => c.body.toLowerCase().includes('@conda-bot please add news'));
-            if (comment) {
-              return { found: true, comment_id: comment.id };
-            } else {
-              return { found: false };
-            }
-          token: ${{ secrets.GITHUB_TOKEN }}
+#       - name: Check for "add news snippet" comment
+#         id: check_comment
+#         uses: actions/github-script@v4
+#         with:
+#           script: |
+#             const { owner, repo } = context.repo;
+#             const issue_number = context.payload.issue.number;
+#             const { data: comments } = await github.issues.listComments({ owner, repo, issue_number });
+#             const comment = comments.find(c => c.body.toLowerCase().includes('@conda-bot please add news'));
+#             if (comment) {
+#               return { found: true, comment_id: comment.id };
+#             } else {
+#               return { found: false };
+#             }
+#           token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Generate News Snippet File
         if: steps.check_comment.outputs.found
