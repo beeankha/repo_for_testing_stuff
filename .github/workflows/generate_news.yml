@@ -5,14 +5,13 @@ on:
     types: [created]
 
 jobs:
-  check:
+  create_news_snippet:
     if: >-
       !github.event.repository.fork
       && (
         github.event.comment.body == '@conda-bot please add news'
         || github.event_name == 'pull_request_target'
       )
-  create_news_snippet:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
