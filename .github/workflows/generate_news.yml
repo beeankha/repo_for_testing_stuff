@@ -11,6 +11,9 @@ jobs:
         github.event.comment.body == 'please add news'
         || github.event_name == 'pull_request_target'
       )
+      
+      checkout-repo:
+        uses: actions/checkout@v2
 
     runs-on: ubuntu-latest
     steps:
@@ -37,18 +40,15 @@ jobs:
             ### Other
             * <news item>
 
-      - name: Checkout repository
-        id: checkout-repo
-        uses: actions/checkout@v2
-
-      - name: Commit File
-        if: steps.create_file.outputs
-        uses: EndBug/add-and-commit@v7
-        with:
-          author_name: GitHub Actions
-          author_email: actions@github.com
-          message: Add news snippet
-          add: news.txt
-          branch: ${{ github.head_ref }}
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-        needs: create_file
+        
+            commit_file:
+            needs: checkout-repo
+            if: steps.create_file.outputs
+            uses: EndBug/add-and-commit@v7
+            with:
+              author_name: GitHub Actions
+              author_email: actions@github.com
+              message: Add news snippet
+              add: news.txt
+              branch: ${{ github.head_ref }}
+              github_token: ${{ secrets.GITHUB_TOKEN }}
