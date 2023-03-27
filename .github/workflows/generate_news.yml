@@ -23,7 +23,7 @@ jobs:
  
       - name: Copy File
         run: |
-          cp /news/TEMPLATE ./"${{ steps.check_comment.outputs.prNumber }}_news"
+          cp news/TEMPLATE ./"${{ steps.check_comment.outputs.prNumber }}_news"
 
       - name: Commit File
         if: steps.create_file.outputs
