@@ -51,4 +51,4 @@ jobs:
           add: news.txt
           branch: ${{ github.head_ref }}
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          run: checkout-repo
+        needs: create_file
