@@ -24,7 +24,7 @@ jobs:
         with:
 #           ref: ${{ github.head_ref }}
           path: "news"
-          file: "news/${{ steps.pr_number }}_news"
+          file: "${{ steps.pr_number }}_news"
           content: |
             ### Enhancements
             * <news item>
