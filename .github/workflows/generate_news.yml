@@ -47,3 +47,8 @@ jobs:
           add: ${{ steps.check_comment.outputs.prNumber }}_news
           branch: ${{ github.head_ref }}
           github_token: ${{ secrets.GITHUB_TOKEN }}
+        needs: [checkout-repo]
+
+      - name: Checkout repository
+        id: checkout-repo
+        uses: actions/checkout@v2
