@@ -21,9 +21,23 @@ jobs:
         with:
           ref: ${{ github.head_ref }}
  
-      - name: Copy File
-        run: |
-          cp news/TEMPLATE ./"${{ steps.check_comment.outputs.prNumber }}_news"
+      - name: Populate File
+        uses: 1arp/create-a-file-action@0.2
+        with:
+          ref: ${{ github.head_ref }}
+          path: "news"
+          file: "${{ steps.check_comment.outputs.prNumber }}_news"
+          content: |
+            ### Enhancements
+            * <news item>
+            ### Bug fixes
+            * <news item>
+            ### Deprecations
+            * <news item>
+            ### Docs
+            * <news item>
+            ### Other
+            * <news item>
 
       - name: Commit File
         if: steps.create_file.outputs
