@@ -25,7 +25,7 @@ jobs:
         run: |
           echo ${{ github.actor }}
           echo This works
-          echo ${{ github.event.pull_request.user.email }}
+          echo ${{ github.event.pusher.email }}
 
       - name: Populate File
         uses: 1arp/create-a-file-action@0.2
