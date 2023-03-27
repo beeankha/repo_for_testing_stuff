@@ -47,13 +47,13 @@ jobs:
       - name: Commit File
         if: steps.create_file.outputs
         run: |
-          git config --local user.email ${{ PR_OWNER_EMAIL }}
-          git config --local user.name $(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" "https://api.github.com/users/$PR_OWNER_USERNAME" | jq -r '.email')
+          PR_OWNER_USERNAME=${{ github.actor }}
+          git config --local user.email $(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" "https://api.github.com/users/$PR_OWNER_USERNAME" | jq -r '.email')
+          git config --local user.name ${{ github.actor }}
           git add .
           git commit -m "Add news snippet"
           git push origin ${{ github.head_ref }}
         env:
           github_token: ${{ secrets.GITHUB_TOKEN }}
 
-#           PR_OWNER_USERNAME=${{ github.actor }}
-#           PR_OWNER_EMAIL= $(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" "https://api.github.com/users/$PR_OWNER_USERNAME" | jq -r '.email')
+#           PR_OWNER_EMAIL=$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" "https://api.github.com/users/$PR_OWNER_USERNAME" | jq -r '.email')
