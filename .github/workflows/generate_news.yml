@@ -19,13 +19,6 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v2
  
-      - name: Add Thumbs Up Emoji
-        uses: EndBug/add-assignees@v7
-        with:
-          reaction: "+1"
-          token: ${{ secrets.GITHUB_TOKEN }}
-          issue_number: ${{ github.event.issue.number }}
-
       - name: Extract branch name
         id: extract_branch
         uses: tj-actions/branch-names@v6
