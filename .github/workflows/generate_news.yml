@@ -33,8 +33,8 @@ jobs:
         uses: 1arp/create-a-file-action@0.2
         with:
           path: ./news
-          file-name: news.txt
-          file-content: |
+          file: news.txt
+          content: |
             ### Enhancements
             * <news item>
             ### Bug fixes
