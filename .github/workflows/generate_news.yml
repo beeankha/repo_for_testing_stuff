@@ -19,34 +19,30 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v2
 
-#       - name: Extract branch name
-#         shell: bash
-#         run: |
-#           echo "branch=$(echo ${GITHUB_REF#refs/heads/})" >>$GITHUB_OUTPUT
-#           echo This is the output pulled in by later task $GITHUB_OUTPUT
-#         id: extract_branch
-
-#       - name: Extract branch name
-#         id: extract_branch
-#         uses: tj-actions/branch-names@v6
-
-#       - name: Extract Pull Request Branch Name
-#         id: extract_branch
-#         uses: actions/github-script@v3
-#         with:
-#           github-token: ${{ secrets.GITHUB_TOKEN }}
-#           script: |
-#             const branch = context.payload.pull_request.head.ref
-#             console.log(`::set-output name=branch::${branch}`)
-
       - name: Extract Pull Request Branch Name
         id: extract_branch
         uses: actions/github-script@v3
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
-            const branch = github.head_ref.pull_request
+            const branch = context.payload.pull_request.head.ref
             console.log(`::set-output name=branch::${branch}`)
+            const ref = context.payload.pull_request.head.ref
+            console.log(`::set-output name=ref::${ref}`)
+            const current = context.payload.pull_request.head.ref
+            console.log(`::set-output name=current::${current}`)
+            const head_ref = context.payload.pull_request.head.ref
+            console.log(`::set-output name=head_ref::${head_ref}`)
+            const head_ref_branch = context.payload.pull_request.head.ref
+            console.log(`::set-output name=head_ref_branch::${head_ref_branch}`)
+
+      - name: Print Current Branch Name to Output
+        run: |
+          echo "Current branch name: ${{ steps.extract_branch.outputs.branch }}"
+          echo "Current ref name: ${{ steps.extract_branch.outputs.ref }}"
+          echo "Current current name: ${{ steps.extract_branch.outputs.current }}"
+          echo "Current head_ref name: ${{ steps.extract_branch.outputs.head_ref }}"
+          echo "Current head_ref_branch name: ${{ steps.extract_branch.outputs.head_ref_branch }}"
 
       - name: Print Stuff
         shell: bash
