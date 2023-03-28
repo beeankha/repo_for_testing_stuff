@@ -29,7 +29,7 @@ jobs:
         env:
           BRANCH_NAME: ${{ steps.extract_branch.outputs.branch }}
 
-      - name: Create a New News File With Pull Request Number and Branch Name in the File Name
+      - name: Create a New File With Pull Request Number and PR Branch Name in the File Name
         uses: 1arp/create-a-file-action@0.2
         with:
           file: "news/${{ github.event.issue.number }}_${{ steps.extract_branch.outputs.branch }}"
@@ -53,32 +53,3 @@ jobs:
           message: "Add news file to this PR"
           add: "news/${{ github.event.issue.number }}_${{ steps.extract_branch.outputs.branch }}"
           branch: ${{ steps.extract_branch.outputs.branch }}
-
-#       - name: Create News File and Populate Its Contents with news/TEMPLATE file contents
-#         uses: 1arp/create-a-file-action@0.2
-#         with:
-#           file: news/news_file
-#           content: |
-#             {{ news/TEMPLATE }}        
-
-#       - name: Commit and Add New News File to the Pull Request
-#         uses: EndBug/add-and-commit@v7
-#         with:
-#           author_name: ${{ github.actor }}
-#           author_email: ${{ github.actor }}@users.noreply.github.com
-#           message: "Add news file to this PR"
-#           add: "news/news_file"
-#           branch: ${{ steps.extract_branch.outputs.branch }}
-#         env:
-#           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-#       - name: Commit and Add News File to the Pull Request
-#         uses: EndBug/add-and-commit@v7
-#         with:
-#           author_name: ${{ github.actor }}
-#           author_email: ${{ github.actor }}@users.noreply.github.com
-#           message: "Add news file"
-#           add: "news/news_file"
-#           branch: ${{ env.BRANCH_NAME }}
-#         env:
-#           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
