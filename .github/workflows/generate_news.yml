@@ -5,32 +5,17 @@ on:
   issue_comment:
     types:
       - created
-  pull_request_target:
-    types:
-      - reopened
-      - opened
-      - synchronize
 
 jobs:
   check:
     if: >-
       !github.event.repository.fork && (
-        github.event.comment.body == '@conda-bot please add news'
+        github.event.comment.body == 'please add news'
         || github.event_name == 'pull_request_target'
       )
 
     runs-on: ubuntu-latest
     steps:
-      - name: Extract PR branch name
-        shell: bash
-        run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
-        id: pr_branch_name
-
-      - name: Extract PR number
-        shell: bash
-        run: echo ${{ github.event.pull_request.number }}
-        id: pr_number
-
       - name: Create File
         if: contains(steps.check_comment.outputs.comment, 'please add news')
         id: create_file
@@ -39,27 +24,19 @@ jobs:
       - name: Populate File
         uses: 1arp/create-a-file-action@0.2
         with:
+          branch: ${{ github.head_ref }}
           path: "news"
-          file: "${{ steps.pr_number }}-${{ steps.pr_branch_name }}"
+          file: "news.txt"
           content: |
             ### Enhancements
-
             * <news item>
-
             ### Bug fixes
-
             * <news item>
-
             ### Deprecations
-
             * <news item>
-
             ### Docs
-
             * <news item>
-
             ### Other
-
             * <news item>
 
       - name: Checkout Repository
@@ -70,72 +47,16 @@ jobs:
       - name: Commit File
         if: steps.create_file.outputs
         run: |
-          git config --local user.email user@example.com
-          git config --local user.name ${{ github.actor }}
+          PR_OWNER_USERNAME=${{ github.actor }}
+          PR_OWNER_EMAIL=$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" "https://api.github.com/users/$PR_OWNER_USERNAME" | jq -r '.email')
+          git config --local user.email $PR_OWNER_EMAIL
+          git config --local user.name $PR_OWNER_USERNAME
           git add .
           git commit -m "Add news snippet"
           git push
         env:
           github_token: ${{ secrets.GITHUB_TOKEN }}
 
-
-# ---
-# name: Add News
-
-# on:
-#   issue_comment:
-#     types:
-#       - created
-
-# jobs:
-#   check:
-#     if: >-
-#       !github.event.repository.fork && (
-#         github.event.comment.body == 'please add news'
-#         || github.event_name == 'pull_request_target'
-#       )
-
-#     runs-on: ubuntu-latest
-#     steps:
-#       - name: Create File
-#         if: contains(steps.check_comment.outputs.comment, 'please add news')
-#         id: create_file
-#         uses: actions/checkout@v2
-
-#       - name: Populate File
-#         uses: 1arp/create-a-file-action@0.2
-#         with:
-# #           branch: ${{ github.head_ref }}
-#           path: "news"
-#           file: "news.txt"
-#           content: |
-#             ### Enhancements
-#             * <news item>
-#             ### Bug fixes
-#             * <news item>
-#             ### Deprecations
-#             * <news item>
-#             ### Docs
-#             * <news item>
-#             ### Other
-#             * <news item>
-
-#       - name: Checkout Repository
-#         uses: actions/checkout@v2
-#         with:
-#           ref: ${{ github.head_ref }}
-
-#       - name: Commit File
-#         if: steps.create_file.outputs
-#         run: |
-#           git config --local user.email user@example.com
-#           git config --local user.name ${{ github.actor }}
-#           git add .
-#           git commit -m "Add news snippet"
-#           git push
-#         env:
-#           github_token: ${{ secrets.GITHUB_TOKEN }}
-
-#             PR_OWNER_USERNAME=${{ github.actor }}
+#           PR_OWNER_USERNAME=${{ github.actor }}
 #           PR_OWNER_EMAIL=$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" "https://api.github.com/users/$PR_OWNER_USERNAME" | jq -r '.email')
 #           git push origin ${{ github.head_ref }}
