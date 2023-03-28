@@ -28,31 +28,49 @@ jobs:
           echo "Pull Request Branch Name: ${{ steps.extract_branch.outputs.branch }}"
         env:
           BRANCH_NAME: ${{ steps.extract_branch.outputs.branch }}
-      
-      - name: Create News File and Populate Its Contents
+
+      - name: Create News File and Populate Its Contents with news/TEMPLATE file contents
         uses: 1arp/create-a-file-action@0.2
         with:
-          path: news
-          file: news.txt
-          content: |
-            ### Enhancements
-            * <news item>
-            ### Bug fixes
-            * <news item>
-            ### Deprecations
-            * <news item>
-            ### Docs
-            * <news item>
-            ### Other
-            * <news item>
+          file: news/news_file
+          contents: |
+            {{ news/TEMPLATE }}        
 
-      - name: Commit and Add News File to the Pull Request
+      - name: Commit and Add New News File to the Pull Request
         uses: EndBug/add-and-commit@v7
         with:
           author_name: ${{ github.actor }}
           author_email: ${{ github.actor }}@users.noreply.github.com
-          message: "Add news file"
+          message: "Add news file to this PR"
           add: "news/news_file"
-          branch: ${{ env.BRANCH_NAME }}
+          branch: ${{ steps.extract_branch.outputs.branch }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+#       - name: Create News File and Populate Its Contents
+#         uses: 1arp/create-a-file-action@0.2
+#         with:
+#           path: news
+#           file: news.txt
+#           content: |
+#             ### Enhancements
+#             * <news item>
+#             ### Bug fixes
+#             * <news item>
+#             ### Deprecations
+#             * <news item>
+#             ### Docs
+#             * <news item>
+#             ### Other
+#             * <news item>
+
+#       - name: Commit and Add News File to the Pull Request
+#         uses: EndBug/add-and-commit@v7
+#         with:
+#           author_name: ${{ github.actor }}
+#           author_email: ${{ github.actor }}@users.noreply.github.com
+#           message: "Add news file"
+#           add: "news/news_file"
+#           branch: ${{ env.BRANCH_NAME }}
+#         env:
+#           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
