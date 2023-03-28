@@ -20,7 +20,7 @@ jobs:
         shell: bash
         run: |
           echo "branch=$(echo ${GITHUB_REF#refs/heads/})" >>$GITHUB_OUTPUT
-          echo This is what "refs heads" points to ${GITHUB_REF#refs/heads/})
+          echo This is what "refs heads" points to ${GITHUB_REF#refs/heads/}
           echo This is the output pulled in by later task $GITHUB_OUTPUT
         id: extract_branch
 
