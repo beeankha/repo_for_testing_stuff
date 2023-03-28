@@ -33,7 +33,7 @@ jobs:
         uses: 1arp/create-a-file-action@0.2
         with:
           file: news/news_file
-          contents: |
+          content: |
             {{ news/TEMPLATE }}        
 
       - name: Commit and Add New News File to the Pull Request
