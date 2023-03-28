@@ -32,10 +32,14 @@ jobs:
         run: |
           PR_OWNER_USERNAME=${{ github.actor }}
           PR_OWNER_EMAIL=$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" "https://api.github.com/users/$PR_OWNER_USERNAME" | jq -r '.email')
-          PR_BRANCH=${{ steps.extract_branch.outputs.head_ref_branch }}
+          PR_BRANCH1=${{ steps.extract_branch.outputs.head_ref_branch }}
+          PR_BRANCH2=${{ steps.extract_branch.outputs.ref_branch }}
+          PR_BRANCH3=${{ steps.extract_branch.outputs.current_branch }}
           echo PR owner username is $PR_OWNER_USERNAME
           echo PR owner email is $PR_OWNER_EMAIL
-          echo Running on pr: $PR_BRANCH
+          echo Running on pr: $PR_BRANCH1
+          echo Running on pr: $PR_BRANCH2
+          echo Running on pr: $PR_BRANCH3
 
       - name: Create File
         uses: 1arp/create-a-file-action@0.2
