@@ -18,23 +18,24 @@ jobs:
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v2
-
-      - name: Extract Pull Request Branch Name
         id: extract_branch
-        uses: actions/github-script@v3
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          script: |
-            const branch = context.payload.pull_request.head.ref
-            console.log(`::set-output name=branch::${branch}`)
-            const ref = context.payload.pull_request.head.ref
-            console.log(`::set-output name=ref::${ref}`)
-            const current = context.payload.pull_request.head.ref
-            console.log(`::set-output name=current::${current}`)
-            const head_ref = context.payload.pull_request.head.ref
-            console.log(`::set-output name=head_ref::${head_ref}`)
-            const head_ref_branch = context.payload.pull_request.head.ref
-            console.log(`::set-output name=head_ref_branch::${head_ref_branch}`)
+
+#       - name: Extract Pull Request Branch Name
+#         id: extract_branch
+#         uses: actions/github-script@v3
+#         with:
+#           github-token: ${{ secrets.GITHUB_TOKEN }}
+#           script: |
+#             const branch = context.payload.pull_request.head.ref
+#             console.log(`::set-output name=branch::${branch}`)
+#             const ref = context.payload.pull_request.head.ref
+#             console.log(`::set-output name=ref::${ref}`)
+#             const current = context.payload.pull_request.head.ref
+#             console.log(`::set-output name=current::${current}`)
+#             const head_ref = context.payload.pull_request.head.ref
+#             console.log(`::set-output name=head_ref::${head_ref}`)
+#             const head_ref_branch = context.payload.pull_request.head.ref
+#             console.log(`::set-output name=head_ref_branch::${head_ref_branch}`)
 
       - name: Print Current Branch Name to Output
         run: |
