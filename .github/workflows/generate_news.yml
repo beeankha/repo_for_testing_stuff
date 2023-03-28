@@ -29,12 +29,40 @@ jobs:
         env:
           BRANCH_NAME: ${{ steps.extract_branch.outputs.branch }}
 
-      - name: Create News File and Populate Its Contents with news/TEMPLATE file contents
+      - name: Create News File and Populate Its Contents
         uses: 1arp/create-a-file-action@0.2
         with:
-          file: news/news_file
+          path: news
+          file: news.txt
           content: |
-            {{ news/TEMPLATE }}        
+
+            ### Enhancements
+
+            * <news item>
+            
+            ### Bug fixes
+            
+            * <news item>
+            
+            ### Deprecations
+            
+            * <news item>
+            
+            ### Docs
+            
+            * <news item>
+            
+            ### Other
+            
+            * <news item>
+
+
+#       - name: Create News File and Populate Its Contents with news/TEMPLATE file contents
+#         uses: 1arp/create-a-file-action@0.2
+#         with:
+#           file: news/news_file
+#           content: |
+#             {{ news/TEMPLATE }}        
 
       - name: Commit and Add New News File to the Pull Request
         uses: EndBug/add-and-commit@v7
@@ -46,23 +74,6 @@ jobs:
           branch: ${{ steps.extract_branch.outputs.branch }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-#       - name: Create News File and Populate Its Contents
-#         uses: 1arp/create-a-file-action@0.2
-#         with:
-#           path: news
-#           file: news.txt
-#           content: |
-#             ### Enhancements
-#             * <news item>
-#             ### Bug fixes
-#             * <news item>
-#             ### Deprecations
-#             * <news item>
-#             ### Docs
-#             * <news item>
-#             ### Other
-#             * <news item>
 
 #       - name: Commit and Add News File to the Pull Request
 #         uses: EndBug/add-and-commit@v7
