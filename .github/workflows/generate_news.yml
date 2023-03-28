@@ -26,9 +26,18 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v2
 
-      - name: Extract branch name
+#       - name: Extract branch name
+#         id: extract_branch
+#         uses: tj-actions/branch-names@v6
+
+      - name: Extract Pull Request Branch Name
         id: extract_branch
-        uses: tj-actions/branch-names@v6
+        uses: actions/github-script@v3
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const branch = context.payload.pull_request.head.ref
+            console.log(`::set-output name=branch::${branch}`)
 
       - name: Print Stuff
         shell: bash
