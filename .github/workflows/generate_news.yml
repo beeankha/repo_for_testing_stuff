@@ -23,26 +23,25 @@ jobs:
         id: extract_branch
         uses: tj-actions/branch-names@v6
 
-      - name: Print Stuff
-        shell: bash
-        run: |
-          PR_OWNER_USERNAME=${{ github.actor }}
-          PR_OWNER_EMAIL=$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" "https://api.github.com/users/$PR_OWNER_USERNAME" | jq -r '.email')
-          PR_BRANCH1=${{ steps.extract_branch.outputs.head_ref_branch }}
-          PR_BRANCH2=${{ steps.extract_branch.outputs.ref_branch }}
-          PR_BRANCH3=${{ steps.extract_branch.outputs.current_branch }}
-          echo PR owner username is $PR_OWNER_USERNAME
-          echo PR owner email is $PR_OWNER_EMAIL
-          echo Running on pr: $PR_BRANCH1
-          echo Running on pr: $PR_BRANCH2
-          echo Running on pr: $PR_BRANCH3
+      - name: Checkout Repository
+        uses: actions/checkout@v2
 
-      - name: Create File
+      - name: Extract branch name
+        id: extract_branch
+        uses: tj-actions/branch-names@v6
+      
+      - name: Print Pull Request Branch Name to Output
+        run: |
+          echo "Pull Request Branch Name: ${{ steps.extract_branch.outputs.branch }}"
+        env:
+          BRANCH_NAME: ${{ steps.extract_branch.outputs.branch }}
+      
+      - name: Create News File and Populate Its Contents
         uses: 1arp/create-a-file-action@0.2
         with:
-          path: 'news'
-          file: 'news.txt'
-          content: |
+          path: ./news
+          file-name: news.txt
+          file-content: |
             ### Enhancements
             * <news item>
             ### Bug fixes
@@ -54,19 +53,58 @@ jobs:
             ### Other
             * <news item>
 
-      - name: Commit File
-        if: steps.create_file.outputs
-        run: |
-          PR_OWNER_USERNAME=${{ github.actor }}
-          PR_OWNER_EMAIL=$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" "https://api.github.com/users/$PR_OWNER_USERNAME" | jq -r '.email')
-          git config --local user.email $PR_OWNER_EMAIL
-          git config --local user.name $PR_OWNER_USERNAME
-          git add .
-          git commit -m "Add news snippet"
-          git push
-        env:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Commit and Push News File to Pull Request
+        uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+          commit_message: Add news file
+          commit_options: '--no-verify'
+          branch: ${{ env.BRANCH_NAME }}
+          file_pattern: ./news/news.txt
 
+#       - name: Print Stuff
+#         shell: bash
+#         run: |
 #           PR_OWNER_USERNAME=${{ github.actor }}
 #           PR_OWNER_EMAIL=$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" "https://api.github.com/users/$PR_OWNER_USERNAME" | jq -r '.email')
-#           git push origin ${{ github.head_ref }}
+#           PR_BRANCH1=${{ steps.extract_branch.outputs.head_ref_branch }}
+#           PR_BRANCH2=${{ steps.extract_branch.outputs.ref_branch }}
+#           PR_BRANCH3=${{ steps.extract_branch.outputs.current_branch }}
+#           echo PR owner username is $PR_OWNER_USERNAME
+#           echo PR owner email is $PR_OWNER_EMAIL
+#           echo Running on pr: $PR_BRANCH1
+#           echo Running on pr: $PR_BRANCH2
+#           echo Running on pr: $PR_BRANCH3
+
+#       - name: Create File
+#         uses: 1arp/create-a-file-action@0.2
+#         with:
+#           path: 'news'
+#           file: 'news.txt'
+#           content: |
+#             ### Enhancements
+#             * <news item>
+#             ### Bug fixes
+#             * <news item>
+#             ### Deprecations
+#             * <news item>
+#             ### Docs
+#             * <news item>
+#             ### Other
+#             * <news item>
+
+#       - name: Commit File
+#         if: steps.create_file.outputs
+#         run: |
+#           PR_OWNER_USERNAME=${{ github.actor }}
+#           PR_OWNER_EMAIL=$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" "https://api.github.com/users/$PR_OWNER_USERNAME" | jq -r '.email')
+#           git config --local user.email $PR_OWNER_EMAIL
+#           git config --local user.name $PR_OWNER_USERNAME
+#           git add .
+#           git commit -m "Add news snippet"
+#           git push
+#         env:
+#           github_token: ${{ secrets.GITHUB_TOKEN }}
+
+# #           PR_OWNER_USERNAME=${{ github.actor }}
+# #           PR_OWNER_EMAIL=$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" "https://api.github.com/users/$PR_OWNER_USERNAME" | jq -r '.email')
+# #           git push origin ${{ github.head_ref }}
