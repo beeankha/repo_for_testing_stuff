@@ -16,27 +16,30 @@ jobs:
 
     runs-on: ubuntu-latest
     steps:
+#       - name: Extract branch name
+#         shell: bash
+#         run: |
+#           echo "branch=$(echo ${GITHUB_REF#refs/heads/})" >>$GITHUB_OUTPUT
+#           echo This is the output pulled in by later task $GITHUB_OUTPUT
+#         id: extract_branch
+
       - name: Extract branch name
-        shell: bash
-        run: |
-          echo "branch=$(echo ${GITHUB_REF#refs/heads/})" >>$GITHUB_OUTPUT
-          echo This is the output pulled in by later task $GITHUB_OUTPUT
         id: extract_branch
+        uses: tj-actions/branch-names@v6
 
       - name: Print Stuff
         shell: bash
         run: |
           PR_OWNER_USERNAME=${{ github.actor }}
           PR_OWNER_EMAIL=$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" "https://api.github.com/users/$PR_OWNER_USERNAME" | jq -r '.email')
-          PR_BRANCH=${{ steps.extract_branch.outputs.branch }}
+          PR_BRANCH=${{ steps.extract_branch.outputs.current_branch }}"
           echo PR owner username is $PR_OWNER_USERNAME
           echo PR owner email is $PR_OWNER_EMAIL
-          echo PR branch is $PR_BRANCH
+          echo Running on pr: $PR_BRANCH
 
       - name: Create File
         uses: 1arp/create-a-file-action@0.2
         with:
-          branch: ${{ github.head_ref }}
           path: 'news'
           file: 'news.txt'
           content: |
