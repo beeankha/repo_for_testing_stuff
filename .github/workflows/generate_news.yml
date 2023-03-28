@@ -4,10 +4,7 @@ name: Add News
 on:
   issue_comment:
     types:
-      - created
-    branches:
-      - ${{ github.head_ref }}
-      
+      - created      
 
 jobs:
   check:
