@@ -32,7 +32,7 @@ jobs:
       - name: Create News File and Populate Its Contents
         uses: 1arp/create-a-file-action@0.2
         with:
-          path: ./news
+          path: news
           file: news.txt
           content: |
             ### Enhancements
@@ -53,6 +53,8 @@ jobs:
           commit_options: '--no-verify'
           branch: ${{ env.BRANCH_NAME }}
           file_pattern: ./news/news.txt
+        env:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
 
 #       - name: Print Stuff
 #         shell: bash
