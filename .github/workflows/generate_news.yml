@@ -23,6 +23,13 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v3
  
+      - name: Add emoji reaction
+        uses: peter-evans/create-or-update-comment@v3
+        with:
+          comment-id: 557858210
+          reactions: |
+            +1
+
       - name: Get branch name
         id: extract_branch
         run: |
