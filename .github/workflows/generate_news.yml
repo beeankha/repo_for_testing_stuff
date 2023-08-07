@@ -27,7 +27,7 @@ jobs:
         uses: peter-evans/create-or-update-comment@v3
         with:
           comment-id: ${{ github.event.comment.id }}
-          reactions: +1
+          reactions: '+1'
 
       - name: Get branch name
         id: extract_branch
