@@ -26,9 +26,8 @@ jobs:
       - name: Add emoji reaction
         uses: peter-evans/create-or-update-comment@v3
         with:
-          comment-id: 557858210
-          reactions: |
-            +1
+          comment-id: ${{ github.event.comment.id }}
+          reactions: +1
 
       - name: Get branch name
         id: extract_branch
