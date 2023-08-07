@@ -17,43 +17,23 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
  
-      - name: Extract branch name
+      - name: Get branch name
         id: extract_branch
-        uses: tj-actions/branch-names@v6
-      
-      - name: Print Pull Request Branch Name to Output
         run: |
-          echo "Pull Request Branch Name: ${{ steps.extract_branch.outputs.branch }}"
-        env:
-          BRANCH_NAME: ${{ steps.extract_branch.outputs.branch }}
+          # GITHUB_REF contains the branch name on branch triggers
+          # GITHUB_HEAD_REF contains the branch name on PR triggers
+          GIT_BRANCH=${GITHUB_REF##*/}
+          GIT_BRANCH=${GITHUB_HEAD_REF:-$GIT_BRANCH}
+          echo "branch=${GIT_BRANCH}" | tee -a $GITHUB_OUTPUT
 
-      - name: Create a New File With Pull Request Number and PR Branch Name in the File Name
-        uses: 1arp/create-a-file-action@0.2
-        with:
-          file: "news/${{ github.event.issue.number }}_${{ steps.extract_branch.outputs.branch }}"
-          content: |
-            ### Enhancements
+      - name: News file from template
+        run: |
+          cp news/TEMPLATE "news/${{ github.event.issue.number }}_${{ steps.extract_branch.outputs.branch }}"
 
-            * <news item>
-
-            ### Bug fixes
-
-            * <news item>
-
-            ### Deprecations
-
-            * <news item>
-
-            ### Docs
-
-            * <news item>
-
-            ### Other
-
-            * <news item>
-
+      - name: Checkout the branch we're running on to enable a commit to it
+        run: git checkout ${{ github.head_ref }}
 
       - name: Commit and Add New News File to the Pull Request
         uses: EndBug/add-and-commit@v7
