@@ -72,4 +72,4 @@ jobs:
           message: "Add news file to this PR"
           add: "news/${{ github.event.issue.number }}_${{ steps.extract_branch.outputs.branch }}"
           branch: ${{ steps.extract_branch.outputs.branch }}
-          push: origin add_news_generator --set-upstream --force    
+          push: true    
