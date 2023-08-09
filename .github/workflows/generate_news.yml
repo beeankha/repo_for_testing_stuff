@@ -53,12 +53,21 @@ jobs:
           git status
           git checkout -b $RANDOM
 
-      - name: Commit and Add New News File to the Pull Request
-        uses: EndBug/add-and-commit@v7
+      - name: Commit and Add New News File to the Pull Request        
+        uses: gr2m/create-or-update-pull-request-action@v1
         with:
-          author_name: ${{ github.actor }}
-          author_email: ${{ github.actor }}@users.noreply.github.com
-          message: "Add news file to this PR"
-          add: "news/${{ github.event.issue.number }}_${{ steps.extract_branch.outputs.branch }}"
+          title: "Add news"
+          body: " Automatically adding news"
+          branch: "add-news"
+          author: ${{ github.actor }}
+          path: "news/${{ github.event.issue.number }}_${{ steps.extract_branch.outputs.branch }}"
+          commit-message: "Add a news file"
+         # uses: EndBug/add-and-commit@v7
+          # with:
+          # author_name: ${{ github.actor }}
+          # author_email: ${{ github.actor }}@users.noreply.github.com
+          # message: "Add news file to this PR"
+          # add: "news/${{ github.event.issue.number }}_${{ steps.extract_branch.outputs.branch }}"
           # branch: ${{ steps.extract_branch.outputs.branch }}
-          push: origin add_news_generator --set-upstream --force
+          # push: origin add_news_generator --set-upstream --force
+    
