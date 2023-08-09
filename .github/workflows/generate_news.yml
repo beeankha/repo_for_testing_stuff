@@ -25,7 +25,10 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v3
         with:
-          ref: refs/pull/${{ github.event.issue.number }}/head
+          repository: ${{ github.event.pull_request.head.repo.full_name }}
+          ref: ${{ github.event.pull_request.head.ref }}
+        # with:
+          # ref: refs/pull/${{ github.event.issue.number }}/head
 
       - name: Extract branch name
         shell: bash
