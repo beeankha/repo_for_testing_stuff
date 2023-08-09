@@ -62,9 +62,10 @@ jobs:
           body: " Automatically adding news"
           branch: "add-news"
           author: ${{ github.actor }}
-          path: "news/${{ github.event.issue.number }}_${{ steps.extract_branch.outputs.branch }}"
+          path: "news/"
           commit-message: "Add a news file"
-         # uses: EndBug/add-and-commit@v7
+          update-pull-request-title-and-body: true
+        # uses: EndBug/add-and-commit@v7
           # with:
           # author_name: ${{ github.actor }}
           # author_email: ${{ github.actor }}@users.noreply.github.com
