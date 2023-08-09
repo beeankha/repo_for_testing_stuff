@@ -46,7 +46,7 @@ jobs:
 
       - name: News file from template
         run: |
-          cp news/TEMPLATE "news/${{ github.event.issue.number }}_${{ steps.extract_branch.outputs.branch }}"
+          cp news/TEMPLATE "news/${{ github.event.issue.number }}_${{ steps.extract_branch.outputs.branch[2] }}"
 
       - name: Check status of the (presumed) PR branch
         run: |
@@ -59,6 +59,6 @@ jobs:
           author_name: ${{ github.actor }}
           author_email: ${{ github.actor }}@users.noreply.github.com
           message: "Add news file to this PR"
-          add: "news/${{ github.event.issue.number }}_${{ steps.extract_branch.outputs.branch }}"
+          add: "news/${{ github.event.issue.number }}_${{ steps.extract_branch.outputs.branch[2] }}"
           # branch: ${{ steps.extract_branch.outputs.branch }}
           push: origin add_news_generator --set-upstream --force
