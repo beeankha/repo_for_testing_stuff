@@ -22,7 +22,7 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v3
         with:
-          ref: refs/pull/${{ github.event.issue.number }}/HEAD
+          ref: refs/pull/${{ github.event.issue.number }}/head
  
       - name: Add emoji reaction
         uses: peter-evans/create-or-update-comment@v3
