@@ -21,6 +21,8 @@ jobs:
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v3
+        with:
+          ref: refs/pull/${{ github.event.issue.number }}/HEAD
  
       - name: Add emoji reaction
         uses: peter-evans/create-or-update-comment@v3
@@ -31,21 +33,14 @@ jobs:
       - name: Dump context
         uses: crazy-max/ghaction-dump-context@v1
 
-      - name: Get branch name
-        id: extract_branch
-        run: |
-          # GITHUB_REF contains the branch name on branch triggers
-          # GITHUB_HEAD_REF contains the branch name on PR triggers
-          GIT_BRANCH=${GITHUB_REF##*/}
-          GIT_BRANCH=${GITHUB_HEAD_REF:-$GIT_BRANCH}
-          echo "branch=${GIT_BRANCH}" | tee -a $GITHUB_OUTPUT
-
       - name: News file from template
         run: |
           cp news/TEMPLATE "news/${{ github.event.issue.number }}_${{ steps.extract_branch.outputs.branch }}"
 
-      - name: Checkout the branch we're running on to enable a commit to it
-        run: git checkout ${{ github.head_ref }}
+      - name: Check status of the (presumed) PR branch
+        run: |
+          git status
+          git checkout -b $RANDOM
 
       - name: Commit and Add New News File to the Pull Request
         uses: EndBug/add-and-commit@v7
@@ -54,4 +49,4 @@ jobs:
           author_email: ${{ github.actor }}@users.noreply.github.com
           message: "Add news file to this PR"
           add: "news/${{ github.event.issue.number }}_${{ steps.extract_branch.outputs.branch }}"
-          branch: ${{ steps.extract_branch.outputs.branch }}
+          # branch: ${{ steps.extract_branch.outputs.branch }}
